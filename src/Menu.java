@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Menu {
 
@@ -50,8 +47,6 @@ public class Menu {
             listaEmpleados.add(new Empleado(id, nombre, apellido, salario));
 
         }
-
-
 
     }
 
@@ -135,5 +130,38 @@ public class Menu {
     public void mostrarEmpleados(){
         listaEmpleados.stream().forEach(empleado -> System.out.println(empleado));
 
+    }
+
+    public void mostrarMayorSalario(){
+        System.out.println(listaEmpleados.stream()
+                .max(Comparator.comparing(Empleado::getSalario))
+                .map(empleado -> empleado.toString())
+                .orElse("No hay empleados"));
+
+    }
+
+    public void mostrarMenorSalario(){
+        System.out.println(listaEmpleados.stream()
+                .min(Comparator.comparing(Empleado::getSalario))
+                .map(empleado -> empleado.toString())
+                .orElse("No hay empleados"));
+    }
+
+    public void mostrarNombresOrdenados(){
+        listaEmpleados.stream().sorted(Comparator.comparing(Empleado::getNombre)).forEach(empleado -> System.out.println(empleado));
+    }
+
+    public void mostrarSumaSalarios(){
+        long total = listaEmpleados.stream().filter(empleado -> empleado.getSalario() > 700000).mapToInt(Empleado::getSalario).reduce(0, (a,b) -> a + b);
+        System.out.println(total);
+    }
+
+    public void mostrarEmpleadosConA(){
+        long total = listaEmpleados.stream().filter(empleado -> empleado.getApellido().toUpperCase().startsWith("A")).count();
+        System.out.println(total);
+    }
+
+    public void mostrarTopSalarios(){
+        listaEmpleados.stream().sorted(Comparator.comparing(Empleado::getSalario, Comparator.reverseOrder())).limit(5).forEach(empleado -> System.out.println(empleado));
     }
 }
